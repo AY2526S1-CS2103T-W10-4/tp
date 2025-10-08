@@ -24,11 +24,13 @@ public class Person {
     // Data fields
     private final Address address;
     private final Set<Tag> tags = new HashSet<>();
+    private final boolean isPresent;
 
     /**
      * Every field must be present and not null.
      */
-    public Person(Name name, Phone phone, Email email, Address address, Set<Tag> tags) {
+    public Person(Name name, Phone phone, Email email, Address address, Set<Tag> tags, boolean isPresent) {
+        this.isPresent = isPresent;
         requireAllNonNull(name, phone, email, address, tags);
         this.name = name;
         this.phone = phone;
@@ -74,6 +76,10 @@ public class Person {
                 && otherPerson.getName().equals(getName());
     }
 
+    public boolean isPresent() {
+        return isPresent;
+    }
+
     /**
      * Returns true if both persons have the same identity and data fields.
      * This defines a stronger notion of equality between two persons.
@@ -103,6 +109,10 @@ public class Person {
         return Objects.hash(name, phone, email, address, tags);
     }
 
+    public Person withPresence(boolean isPresent) {
+        return new Person(name, phone, email, address, tags, isPresent);
+    }
+
     @Override
     public String toString() {
         return new ToStringBuilder(this)
@@ -111,6 +121,7 @@ public class Person {
                 .add("email", email)
                 .add("address", address)
                 .add("tags", tags)
+                .add("isPresent", isPresent)
                 .toString();
     }
 
